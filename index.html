@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Roles Fetcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        /* Input and Button Styles */
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+            width: 200px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Error and Result Styles */
+        .error {
+            color: #ff5555;
+            margin-top: 10px;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+            background-color: #1e1e1e;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 20px;
+            max-width: 400px;
+        }
+
+        .result h2 {
+            color: #4caf50;
+        }
+
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .result li {
+            margin: 5px 0;
+            color: #dddddd;
+        }
+
+        a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fetch Top 5 Recommended Roles</h1>
+
+    <div>
+        <input type="text" id="studentIdInput" placeholder="Enter Student ID">
+        <button onclick="fetchTopRoles()">Fetch Roles</button>
+    </div>
+
+    <p id="errorMessage" class="error"></p>
+
+    <div id="resultContainer" class="result" style="display: none;"></div>
+
+    <script>
+        async function fetchTopRoles() {
+            const studentId = document.getElementById('studentIdInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const resultContainer = document.getElementById('resultContainer');
+
+            errorMessage.textContent = ''; // Clear any previous error messages
+            resultContainer.innerHTML = ''; // Clear any previous results
+
+            if (!studentId) {
+                resultContainer.style.display = 'none';
+                errorMessage.textContent = 'Please enter a student ID';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/get-top-roles?student_id=${studentId}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to fetch roles');
+                }
+
+                resultContainer.style.display = 'inline-block';
+                const data = await response.json();
+
+                // Display the result
+                const studentName = document.createElement('h2');
+                studentName.textContent = `Hello, ${data.student_name}!`;
+                resultContainer.appendChild(studentName);
+
+                const messageDiv = document.createElement('h3');
+                messageDiv.textContent = "Here are the roles recommended for you:"
+                resultContainer.appendChild(messageDiv)
+
+                const roleList = document.createElement('ol');
+                data.top_roles.forEach(role => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = role;
+                    roleList.appendChild(listItem);
+                });
+                resultContainer.appendChild(roleList);
+
+            } catch (error) {
+                resultContainer.style.display = 'none';
+                errorMessage.textContent = error.message;
+            }
+        }
+        document.getElementById('studentIdInput').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                fetchTopRoles();
+            }
+        });
+    </script>
+</body>
+
+</html>
