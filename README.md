@@ -31,6 +31,17 @@ A simple frontend was made in `index.html` to visually interact with the API end
     git clone https://github.com/Taanviir/get-top-roles.git
     cd get-top-roles/
     ```
+- Set up virtual environment (optional but recommended):
+   - For Windows:
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+   - For macOS/Linux:
+     ```bash
+     python3 -m venv venv
+     source venv/bin/activate
+     ```
 - Install the required Python packages using `requirements.txt`:
     ```bash
     pip install -r requirements.txt
@@ -47,6 +58,20 @@ A simple frontend was made in `index.html` to visually interact with the API end
 2. Open the website at `http://localhost:5000`.
 3. Enter a valid student ID (`1` or `2` in the mock data) in the input box and press "Fetch Roles" or hit the **Enter** key.
 4. View the list of recommended roles.
+5. If the JSON alone is preferred then open the following link:
+   - Open a browser and visit: `http://127.0.0.1:5000/get-top-roles?student_id=1`.
+   - Or use curl to interact with the API endpoint:
+    ```
+    curl "http://127.0.0.1:5000/get-top-roles?student_id=1"
+    ```
+   - You should see JSON data like:
+     ```json
+     {
+         "student_id": "1",
+         "student_name": "Alice",
+         "top_roles": ["Developer", "Data Scientist", "UX Designer", "Analyst", "Product Manager"]
+     }
+     ```
 
 ---
 
