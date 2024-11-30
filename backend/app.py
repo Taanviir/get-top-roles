@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../frontend")
 CORS(app)  # allowing all routes and origins
 
 mock_data = {
@@ -28,6 +28,11 @@ mock_data = {
         },
     }
 }
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 
 @app.route("/get-top-roles", methods=["GET"])
