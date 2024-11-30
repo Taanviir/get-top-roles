@@ -59,12 +59,21 @@
         .result {
             margin-top: 20px;
             text-align: left;
-            display: inline-block;
+            display: none;
             background-color: #1e1e1e;
             border: 1px solid #444;
             border-radius: 5px;
             padding: 20px;
             max-width: 400px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .result.visible {
+            display: inline-block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .result h2 {
@@ -102,7 +111,7 @@
 
     <p id="errorMessage" class="error"></p>
 
-    <div id="resultContainer" class="result" style="display: none;"></div>
+    <div id="resultContainer" class="result"></div>
 
     <script>
         async function fetchTopRoles() {
@@ -112,6 +121,7 @@
 
             errorMessage.textContent = ''; // Clear any previous error messages
             resultContainer.innerHTML = ''; // Clear any previous results
+            resultContainer.classList.remove('visible'); // Reset animation
 
             if (!studentId) {
                 resultContainer.style.display = 'none';
@@ -126,7 +136,6 @@
                     throw new Error(errorData.error || 'Failed to fetch roles');
                 }
 
-                resultContainer.style.display = 'inline-block';
                 const data = await response.json();
 
                 // Display the result
@@ -135,8 +144,8 @@
                 resultContainer.appendChild(studentName);
 
                 const messageDiv = document.createElement('h3');
-                messageDiv.textContent = "Here are the roles recommended for you:"
-                resultContainer.appendChild(messageDiv)
+                messageDiv.textContent = "Here are the roles recommended for you:";
+                resultContainer.appendChild(messageDiv);
 
                 const roleList = document.createElement('ol');
                 data.top_roles.forEach(role => {
@@ -146,11 +155,18 @@
                 });
                 resultContainer.appendChild(roleList);
 
+                // Apply animation
+                resultContainer.style.display = 'inline-block';
+                setTimeout(() => {
+                    resultContainer.classList.add('visible');
+                }, 10);
+
             } catch (error) {
                 resultContainer.style.display = 'none';
                 errorMessage.textContent = error.message;
             }
         }
+
         document.getElementById('studentIdInput').addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 fetchTopRoles();
