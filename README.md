@@ -1,7 +1,5 @@
 # get-top-roles: Backend endpoint to get recommended roles
 
----
-
 #### **Overview**
 
 This application demonstrates a simple backend endpoint `/get-top-roles` to fetch and display the top 5 recommended roles for a student based on their ID. It uses a Flask backend to serve mock data and an HTML/JavaScript frontend to fetch and display the results.
