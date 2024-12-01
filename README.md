@@ -61,9 +61,9 @@ A simple frontend was made in `index.html` to visually interact with the API end
 5. If the JSON alone is preferred then open the following link:
    - Open a browser and visit: `http://127.0.0.1:5000/get-top-roles?student_id=1`.
    - Or use curl to interact with the API endpoint:
-    ```
-    curl "http://127.0.0.1:5000/get-top-roles?student_id=1"
-    ```
+       ```
+       curl "http://127.0.0.1:5000/get-top-roles?student_id=1"
+       ```
    - You should see JSON data like:
      ```json
      {
